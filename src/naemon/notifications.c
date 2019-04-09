@@ -269,7 +269,7 @@ void log_notification_suppression_reason(enum NotificationSuppressionReason reas
 		_log_nsr("Notification blocked for service because its associated host is currently in a scheduled downtime.");
 		break;
 	case NSR_INSUFF_IMPORTANCE:
-		_log_nsr("Notification blocked for contact because it is not important enough (according to minimum_value).");
+		_log_nsr("Notification blocked for contact because it is not important enough (according to minimum_importance).");
 		break;
 
 	}
@@ -850,7 +850,7 @@ int check_contact_service_notification_viability(contact *cntct, service *svc, i
 	}
 
 	/* is this service not important enough? */
-	if (cntct->minimum_value > svc->hourly_value) {
+	if (cntct->minimum_importance > svc->importance) {
 		LOG_SERVICE_CONTACT_NSR(NSR_INSUFF_IMPORTANCE);
 		return ERROR;
 	}
@@ -1706,7 +1706,7 @@ int check_contact_host_notification_viability(contact *cntct, host *hst, int typ
 	}
 
 	/* is this host important enough? */
-	if (cntct->minimum_value > hst->hourly_value && cntct->minimum_value > hst->hourly_value + host_services_value(hst)) {
+	if (cntct->minimum_importance > hst->importance && cntct->minimum_importance > hst->importance + host_services_value(hst)) {
 		LOG_HOST_CONTACT_NSR(NSR_INSUFF_IMPORTANCE);
 		return ERROR;
 	}

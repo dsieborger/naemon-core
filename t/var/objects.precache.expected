@@ -68,7 +68,7 @@ define contact {
 	host_notification_options	r,d,u,f,s
 	service_notification_commands	notify-none
 	host_notification_commands	notify-none
-	minimum_value	1
+	minimum_importance	1
 	host_notifications_enabled	0
 	service_notifications_enabled	0
 	can_submit_commands	1
@@ -85,7 +85,7 @@ define contact {
 	host_notification_options	r,d,u,f,s
 	service_notification_commands	notify-none
 	host_notification_commands	notify-none
-	minimum_value	1
+	minimum_importance	1
 	host_notifications_enabled	0
 	service_notifications_enabled	0
 	can_submit_commands	1
@@ -101,7 +101,7 @@ define host {
 	contacts	naemonadmin
 	notification_period	none
 	initial_state	o
-	hourly_value	1
+	importance	1
 	check_interval	5.000000
 	retry_interval	1.000000
 	max_check_attempts	2
@@ -133,7 +133,7 @@ define host {
 	contacts	naemonadmin
 	notification_period	none
 	initial_state	o
-	hourly_value	1
+	importance	1
 	check_interval	5.000000
 	retry_interval	1.000000
 	max_check_attempts	2
@@ -165,7 +165,7 @@ define host {
 	contacts	naemonadmin
 	notification_period	none
 	initial_state	o
-	hourly_value	1
+	importance	1
 	check_interval	5.000000
 	retry_interval	1.000000
 	max_check_attempts	2
@@ -197,7 +197,7 @@ define service {
 	contacts	naemonadmin
 	notification_period	none
 	initial_state	o
-	hourly_value	1
+	importance	1
 	check_interval	32.000000
 	retry_interval	1.000000
 	max_check_attempts	3
@@ -230,7 +230,7 @@ define service {
 	contacts	naemonadmin
 	notification_period	none
 	initial_state	o
-	hourly_value	1
+	importance	1
 	check_interval	15.000000
 	retry_interval	1.000000
 	max_check_attempts	5
@@ -263,7 +263,7 @@ define service {
 	contacts	naemonadmin
 	notification_period	none
 	initial_state	o
-	hourly_value	1
+	importance	1
 	check_interval	15.000000
 	retry_interval	1.000000
 	max_check_attempts	5
@@ -296,7 +296,7 @@ define service {
 	contacts	naemonadmin
 	notification_period	none
 	initial_state	o
-	hourly_value	1
+	importance	1
 	check_interval	15.000000
 	retry_interval	1.000000
 	max_check_attempts	5
@@ -329,7 +329,7 @@ define service {
 	contacts	naemonadmin
 	notification_period	none
 	initial_state	o
-	hourly_value	1
+	importance	1
 	check_interval	15.000000
 	retry_interval	1.000000
 	max_check_attempts	5

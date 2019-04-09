@@ -55,7 +55,7 @@ contact *create_contact(const char *name)
 	return new_contact;
 }
 
-int setup_contact_variables(contact *new_contact, const char *alias, const char *email, const char *pager, char * const *addresses, const char *svc_notification_period, const char *host_notification_period, int service_notification_options, int host_notification_options, int host_notifications_enabled, int service_notifications_enabled, int can_submit_commands, int retain_status_information, int retain_nonstatus_information, unsigned int minimum_value)
+int setup_contact_variables(contact *new_contact, const char *alias, const char *email, const char *pager, char * const *addresses, const char *svc_notification_period, const char *host_notification_period, int service_notification_options, int host_notification_options, int host_notifications_enabled, int service_notifications_enabled, int can_submit_commands, int retain_status_information, int retain_nonstatus_information, unsigned int minimum_importance)
 {
 	timeperiod *htp = NULL, *stp = NULL;
 	int x = 0;
@@ -84,7 +84,7 @@ int setup_contact_variables(contact *new_contact, const char *alias, const char 
 			new_contact->address[x] = addresses[x] ? nm_strdup(addresses[x]) : NULL;
 	}
 
-	new_contact->minimum_value = minimum_value;
+	new_contact->minimum_importance = minimum_importance;
 	new_contact->service_notification_options = service_notification_options;
 	new_contact->host_notification_options = host_notification_options;
 	new_contact->host_notifications_enabled = (host_notifications_enabled > 0) ? TRUE : FALSE;
@@ -327,7 +327,7 @@ void fcache_contact(FILE *fp, const contact *temp_contact)
 		if (temp_contact->address[x])
 			fprintf(fp, "\taddress%d\t%s\n", x + 1, temp_contact->address[x]);
 	}
-	fprintf(fp, "\tminimum_value\t%u\n", temp_contact->minimum_value);
+	fprintf(fp, "\tminimum_importance\t%u\n", temp_contact->minimum_importance);
 	fprintf(fp, "\thost_notifications_enabled\t%d\n", temp_contact->host_notifications_enabled);
 	fprintf(fp, "\tservice_notifications_enabled\t%d\n", temp_contact->service_notifications_enabled);
 	fprintf(fp, "\tcan_submit_commands\t%d\n", temp_contact->can_submit_commands);

@@ -754,7 +754,7 @@ static int xodtemplate_begin_object_definition(char *input, int cfgfile, int sta
 	if (!strcmp(input, "service")) {
 		xodtemplate_current_object_type = XODTEMPLATE_SERVICE;
 		xod_begin_def(service);
-		new_service->hourly_value = 1;
+		new_service->importance = 1;
 		new_service->initial_state = STATE_OK;
 		new_service->max_check_attempts = -2;
 		new_service->check_interval = 5.0;
@@ -776,7 +776,7 @@ static int xodtemplate_begin_object_definition(char *input, int cfgfile, int sta
 	} else if (!strcmp(input, "host")) {
 		xodtemplate_current_object_type = XODTEMPLATE_HOST;
 		xod_begin_def(host);
-		new_host->hourly_value = 1;
+		new_host->importance = 1;
 		new_host->check_interval = 5.0;
 		new_host->retry_interval = 1.0;
 		new_host->active_checks_enabled = TRUE;
@@ -799,7 +799,7 @@ static int xodtemplate_begin_object_definition(char *input, int cfgfile, int sta
 	} else if (!strcmp(input, "contact")) {
 		xodtemplate_current_object_type = XODTEMPLATE_CONTACT;
 		xod_begin_def(contact);
-		new_contact->minimum_value = 1;
+		new_contact->minimum_importance = 1;
 		new_contact->host_notifications_enabled = TRUE;
 		new_contact->service_notifications_enabled = TRUE;
 		new_contact->can_submit_commands = TRUE;
@@ -3549,7 +3549,7 @@ static int xodtemplate_resolve_contact(xodtemplate_contact *this_contact)
 		xod_inherit(this_contact, template_contact, can_submit_commands);
 		xod_inherit(this_contact, template_contact, retain_status_information);
 		xod_inherit(this_contact, template_contact, retain_nonstatus_information);
-		xod_inherit(this_contact, template_contact, minimum_value);
+		xod_inherit(this_contact, template_contact, minimum_importance);
 
 		/* apply missing custom variables from template contact... */
 		for (temp_customvariablesmember = template_contact->custom_variables; temp_customvariablesmember != NULL; temp_customvariablesmember = temp_customvariablesmember->next) {
@@ -3652,7 +3652,7 @@ static int xodtemplate_resolve_host(xodtemplate_host *this_host)
 		xod_inherit(this_host, template_host, first_notification_delay);
 		xod_inherit(this_host, template_host, stalking_options);
 		xod_inherit(this_host, template_host, process_perf_data);
-		xod_inherit(this_host, template_host, hourly_value);
+		xod_inherit(this_host, template_host, importance);
 
 		if (this_host->have_2d_coords == FALSE && template_host->have_2d_coords == TRUE) {
 			this_host->x_2d = template_host->x_2d;
@@ -3778,7 +3778,7 @@ static int xodtemplate_resolve_service(xodtemplate_service *this_service)
 		xod_inherit(this_service, template_service, process_perf_data);
 		xod_inherit(this_service, template_service, retain_status_information);
 		xod_inherit(this_service, template_service, retain_nonstatus_information);
-		xod_inherit(this_service, template_service, hourly_value);
+		xod_inherit(this_service, template_service, importance);
 
 		/* apply missing custom variables from template service... */
 		for (temp_customvariablesmember = template_service->custom_variables; temp_customvariablesmember != NULL; temp_customvariablesmember = temp_customvariablesmember->next) {
@@ -5539,7 +5539,7 @@ static int xodtemplate_register_contact(void *contact_, void *discard)
 		nm_log(NSLOG_CONFIG_ERROR, "Error: Could not register contact (config file '%s', starting on line %d)\n", xodtemplate_config_file_name(this_contact->_config_file), this_contact->_start_line);
 		return ERROR;
 	}
-	if (setup_contact_variables(new_contact, this_contact->alias, this_contact->email, this_contact->pager, this_contact->address, this_contact->service_notification_period, this_contact->host_notification_period, this_contact->service_notification_options, this_contact->host_notification_options, this_contact->host_notifications_enabled, this_contact->service_notifications_enabled, this_contact->can_submit_commands, this_contact->retain_status_information, this_contact->retain_nonstatus_information, this_contact->minimum_value)) {
+	if (setup_contact_variables(new_contact, this_contact->alias, this_contact->email, this_contact->pager, this_contact->address, this_contact->service_notification_period, this_contact->host_notification_period, this_contact->service_notification_options, this_contact->host_notification_options, this_contact->host_notifications_enabled, this_contact->service_notifications_enabled, this_contact->can_submit_commands, this_contact->retain_status_information, this_contact->retain_nonstatus_information, this_contact->minimum_importance)) {
 		nm_log(NSLOG_CONFIG_ERROR, "Error: Could not register contact (config file '%s', starting on line %d)\n", xodtemplate_config_file_name(this_contact->_config_file), this_contact->_start_line);
 		return ERROR;
 	}
@@ -5658,7 +5658,7 @@ static int xodtemplate_register_host(void *host_, void *discard)
 		nm_log(NSLOG_CONFIG_ERROR, "Error: Could not register host (config file '%s', starting on line %d)\n", xodtemplate_config_file_name(this_host->_config_file), this_host->_start_line);
 		return ERROR;
 	}
-	if (setup_host_variables(new_host, this_host->display_name, this_host->alias, this_host->address, this_host->check_period, this_host->initial_state, this_host->check_interval, this_host->retry_interval, this_host->max_check_attempts, this_host->notification_options, this_host->notification_interval, this_host->first_notification_delay, this_host->notification_period, this_host->notifications_enabled, this_host->check_command, this_host->active_checks_enabled, this_host->passive_checks_enabled, this_host->event_handler, this_host->event_handler_enabled, this_host->flap_detection_enabled, this_host->low_flap_threshold, this_host->high_flap_threshold, this_host->flap_detection_options, this_host->stalking_options, this_host->process_perf_data, this_host->check_freshness, this_host->freshness_threshold, this_host->notes, this_host->notes_url, this_host->action_url, this_host->icon_image, this_host->icon_image_alt, this_host->vrml_image, this_host->statusmap_image, this_host->x_2d, this_host->y_2d, this_host->have_2d_coords, this_host->x_3d, this_host->y_3d, this_host->z_3d, this_host->have_3d_coords, this_host->retain_status_information, this_host->retain_nonstatus_information, this_host->obsess, this_host->hourly_value)) {
+	if (setup_host_variables(new_host, this_host->display_name, this_host->alias, this_host->address, this_host->check_period, this_host->initial_state, this_host->check_interval, this_host->retry_interval, this_host->max_check_attempts, this_host->notification_options, this_host->notification_interval, this_host->first_notification_delay, this_host->notification_period, this_host->notifications_enabled, this_host->check_command, this_host->active_checks_enabled, this_host->passive_checks_enabled, this_host->event_handler, this_host->event_handler_enabled, this_host->flap_detection_enabled, this_host->low_flap_threshold, this_host->high_flap_threshold, this_host->flap_detection_options, this_host->stalking_options, this_host->process_perf_data, this_host->check_freshness, this_host->freshness_threshold, this_host->notes, this_host->notes_url, this_host->action_url, this_host->icon_image, this_host->icon_image_alt, this_host->vrml_image, this_host->statusmap_image, this_host->x_2d, this_host->y_2d, this_host->have_2d_coords, this_host->x_3d, this_host->y_3d, this_host->z_3d, this_host->have_3d_coords, this_host->retain_status_information, this_host->retain_nonstatus_information, this_host->obsess, this_host->importance)) {
 		nm_log(NSLOG_CONFIG_ERROR, "Error: Could not register host (config file '%s', starting on line %d)\n", xodtemplate_config_file_name(this_host->_config_file), this_host->_start_line);
 		return ERROR;
 	}
@@ -5977,7 +5977,7 @@ static int xodtemplate_register_service(void *srv, void *discard)
 		nm_log(NSLOG_CONFIG_ERROR, "Error: Could not register service (config file '%s', starting on line %d)\n", xodtemplate_config_file_name(this_service->_config_file), this_service->_start_line);
 		return ERROR;
 	}
-	if (setup_service_variables(new_service, this_service->display_name, this_service->check_command, this_service->check_period, this_service->initial_state, this_service->max_check_attempts, this_service->passive_checks_enabled, this_service->check_interval, this_service->retry_interval, this_service->notification_interval, this_service->first_notification_delay, this_service->notification_period, this_service->notification_options, this_service->notifications_enabled, this_service->is_volatile, this_service->event_handler, this_service->event_handler_enabled, this_service->active_checks_enabled, this_service->flap_detection_enabled, this_service->low_flap_threshold, this_service->high_flap_threshold, this_service->flap_detection_options, this_service->stalking_options, this_service->process_perf_data, this_service->check_freshness, this_service->freshness_threshold, this_service->notes, this_service->notes_url, this_service->action_url, this_service->icon_image, this_service->icon_image_alt, this_service->retain_status_information, this_service->retain_nonstatus_information, this_service->obsess, this_service->hourly_value)) {
+	if (setup_service_variables(new_service, this_service->display_name, this_service->check_command, this_service->check_period, this_service->initial_state, this_service->max_check_attempts, this_service->passive_checks_enabled, this_service->check_interval, this_service->retry_interval, this_service->notification_interval, this_service->first_notification_delay, this_service->notification_period, this_service->notification_options, this_service->notifications_enabled, this_service->is_volatile, this_service->event_handler, this_service->event_handler_enabled, this_service->active_checks_enabled, this_service->flap_detection_enabled, this_service->low_flap_threshold, this_service->high_flap_threshold, this_service->flap_detection_options, this_service->stalking_options, this_service->process_perf_data, this_service->check_freshness, this_service->freshness_threshold, this_service->notes, this_service->notes_url, this_service->action_url, this_service->icon_image, this_service->icon_image_alt, this_service->retain_status_information, this_service->retain_nonstatus_information, this_service->obsess, this_service->importance)) {
 		nm_log(NSLOG_CONFIG_ERROR, "Error: Could not register service (config file '%s', starting on line %d)\n", xodtemplate_config_file_name(this_service->_config_file), this_service->_start_line);
 		return ERROR;
 	}
@@ -7238,9 +7238,9 @@ static int xodtemplate_add_object_property(char *input)
 		} else if (!strcmp(variable, "retain_nonstatus_information")) {
 			temp_contact->retain_nonstatus_information = (atoi(value) > 0) ? TRUE : FALSE;
 			temp_contact->have_retain_nonstatus_information = TRUE;
-		} else if (!strcmp(variable, "minimum_value")) {
-			temp_contact->minimum_value = strtoul(value, NULL, 10);
-			temp_contact->have_minimum_value = TRUE;
+		} else if (!strcmp(variable, "minimum_importance") || !strcmp(variable, "minimum_value")) {
+			temp_contact->minimum_importance = strtoul(value, NULL, 10);
+			temp_contact->have_minimum_importance = TRUE;
 		} else if (!strcmp(variable, "register"))
 			temp_contact->register_object = (atoi(value) > 0) ? TRUE : FALSE;
 		else if (variable[0] == '_') {
@@ -7412,9 +7412,9 @@ static int xodtemplate_add_object_property(char *input)
 		} else if (!strcmp(variable, "retry_interval") || !strcmp(variable, "retry_check_interval")) {
 			temp_host->retry_interval = strtod(value, NULL);
 			temp_host->have_retry_interval = TRUE;
-		} else if (!strcmp(variable, "hourly_value")) {
-			temp_host->hourly_value = (unsigned int)strtoul(value, NULL, 10);
-			temp_host->have_hourly_value = 1;
+		} else if (!strcmp(variable, "importance") || !strcmp(variable, "hourly_value")) {
+			temp_host->importance = (unsigned int)strtoul(value, NULL, 10);
+			temp_host->have_importance = 1;
 		} else if (!strcmp(variable, "max_check_attempts")) {
 			temp_host->max_check_attempts = atoi(value);
 			temp_host->have_max_check_attempts = TRUE;
@@ -7736,9 +7736,9 @@ static int xodtemplate_add_object_property(char *input)
 				result = ERROR;
 			}
 			temp_service->have_initial_state = TRUE;
-		} else if (!strcmp(variable, "hourly_value")) {
-			temp_service->hourly_value = (unsigned int)strtoul(value, NULL, 10);
-			temp_service->have_hourly_value = 1;
+		} else if (!strcmp(variable, "importance") || !strcmp(variable, "hourly_value")) {
+			temp_service->importance = (unsigned int)strtoul(value, NULL, 10);
+			temp_service->have_importance = 1;
 		} else if (!strcmp(variable, "max_check_attempts")) {
 			temp_service->max_check_attempts = atoi(value);
 			temp_service->have_max_check_attempts = TRUE;

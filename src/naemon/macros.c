@@ -829,13 +829,13 @@ static int grab_standard_host_macro_r(nagios_macros *mac, int macro_type, host *
 		*output = mac->x[macro_type];
 		break;
 	case MACRO_HOSTVALUE:
-		*output = (char *)mkstr("%u", mac->host_ptr->hourly_value);
+		*output = (char *)mkstr("%u", mac->host_ptr->importance);
 		break;
 	case MACRO_SERVICEVALUE:
 		*output = (char *)mkstr("%u", host_services_value(mac->host_ptr));
 		break;
 	case MACRO_PROBLEMVALUE:
-		*output = (char *)mkstr("%u", mac->host_ptr->hourly_value + host_services_value(mac->host_ptr));
+		*output = (char *)mkstr("%u", mac->host_ptr->importance + host_services_value(mac->host_ptr));
 		break;
 
 		/***************/

@@ -130,7 +130,7 @@ typedef struct xodtemplate_contact_struct {
     int       can_submit_commands;
     int       retain_status_information;
     int       retain_nonstatus_information;
-    unsigned int minimum_value;
+    unsigned int minimum_importance;
     xodtemplate_customvariablesmember *custom_variables;
 
     char have_contact_groups;
@@ -149,7 +149,7 @@ typedef struct xodtemplate_contact_struct {
     char have_can_submit_commands;
     char have_retain_status_information;
     char have_retain_nonstatus_information;
-    unsigned have_minimum_value : 1;
+    unsigned have_minimum_importance : 1;
 
     unsigned has_been_resolved : 1;
     unsigned register_object : 1;
@@ -199,7 +199,7 @@ typedef struct xodtemplate_host_struct {
     char      *host_groups;
     char      *check_command;
     char      *check_period;
-    unsigned int hourly_value;
+    unsigned int importance;
     int       initial_state;
     double    check_interval;
     double    retry_interval;
@@ -283,7 +283,7 @@ typedef struct xodtemplate_host_struct {
     unsigned have_3d_coords : 1;
     unsigned have_retain_status_information : 1;
     unsigned have_retain_nonstatus_information : 1;
-    unsigned have_hourly_value : 1;
+    unsigned have_importance : 1;
 
     unsigned has_been_resolved : 1;
     unsigned register_object : 1;
@@ -343,7 +343,7 @@ typedef struct xodtemplate_service_struct {
     double     check_interval;
     double     retry_interval;
     char       *check_period;
-    unsigned int hourly_value;
+    unsigned int importance;
     int        active_checks_enabled;
     int        passive_checks_enabled;
     int        is_volatile;
@@ -419,7 +419,7 @@ typedef struct xodtemplate_service_struct {
     unsigned have_process_perf_data : 1;
     unsigned have_retain_status_information : 1;
     unsigned have_retain_nonstatus_information : 1;
-    unsigned have_hourly_value : 1;
+    unsigned have_importance : 1;
     unsigned is_from_hostgroup : 1;
 
     unsigned is_copy : 1;
